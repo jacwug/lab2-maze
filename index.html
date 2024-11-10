@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Maze Game</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+
+        #controls {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="mazeCanvas" width="600" height="600"></canvas>
+    <div id="controls">
+        <label for="algorithm">Select Algorithm:</label>
+        <select id="algorithm">
+            <option value="bfs">Breadth-First Search</option>
+            <option value="dfs">Depth-First Search</option>
+        </select>
+        <button id="solveBtn">Solve Maze</button>
+        <button id="resetBtn">Reset Maze</button>
+        <label for="mazeSize">Maze Size:</label>
+        <input type="number" id="mazeSize" value="20" min="5" max="100">
+    </div>
+    <script>
+        // Maze Game JavaScript Code
+
+        const canvas = document.getElementById('mazeCanvas');
+        const ctx = canvas.getContext('2d');
+        let mazeSize = parseInt(document.getElementById('mazeSize').value);
+        let cellSize = canvas.width / mazeSize;
+        let maze = [];
+        let player = { x: 0, y: 0 };
+        let exit = { x: mazeSize - 1, y: mazeSize -1 };
+        let solving = false;
+        let solutionPath = [];
+        let animationFrame;
+
+        function init() {
+            generateMaze();
+            player = { x: 0, y: 0 };
+            exit = { x: mazeSize - 1, y: mazeSize -1 };
+            drawMaze();
+            drawPlayer();
+        }
+
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            cancelAnimationFrame(animationFrame);
+            mazeSize = parseInt(document.getElementById('mazeSize').value);
+            cellSize = canvas.width / mazeSize;
+            init();
+        });
+
+        document.getElementById('solveBtn').addEventListener('click', function() {
+            if (!solving) {
+                solving = true;
+                const algorithm = document.getElementById('algorithm').value;
+                if (algorithm === 'bfs') {
+                    bfs();
+                } else {
+                    dfs();
+                }
+            }
+        });
+
+        function generateMaze() {
+            // Implement maze generation algorithm (e.g., Prim's algorithm)
+            // For simplicity, let's use a recursive backtracker algorithm
+            maze = [];
+            for (let x = 0; x < mazeSize; x++) {
+                maze[x] = [];
+                for (let y = 0; y < mazeSize; y++) {
+                    maze[x][y] = {
+                        walls: [true, true, true, true], // top, right, bottom, left
+                        visited: false
+                    };
+                }
+            }
+
+            let stack = [];
+            let currentCell = maze[0][0];
+            currentCell.visited = true;
+            stack.push(currentCell);
+
+            while (stack.length > 0) {
+                let neighbors = getUnvisitedNeighbors(currentCell);
+                if (neighbors.length > 0) {
+                    let nextCell = neighbors[Math.floor(Math.random() * neighbors.length)];
+                    removeWalls(currentCell, nextCell);
+                    nextCell.visited = true;
+                    stack.push(currentCell);
+                    currentCell = nextCell;
+                } else {
+                    currentCell = stack.pop();
+                }
+            }
+
+            function getUnvisitedNeighbors(cell) {
+                let x = getCellPosition(cell).x;
+                let y = getCellPosition(cell).y;
+                let neighbors = [];
+
+                if (y > 0 && !maze[x][y - 1].visited) {
+                    neighbors.push(maze[x][y - 1]); // top
+                }
+                if (x < mazeSize - 1 && !maze[x + 1][y].visited) {
+                    neighbors.push(maze[x + 1][y]); // right
+                }
+                if (y < mazeSize - 1 && !maze[x][y + 1].visited) {
+                    neighbors.push(maze[x][y + 1]); // bottom
+                }
+                if (x > 0 && !maze[x - 1][y].visited) {
+                    neighbors.push(maze[x - 1][y]); // left
+                }
+
+                return neighbors;
+            }
+
+            function removeWalls(current, next) {
+                let xCurrent = getCellPosition(current).x;
+                let yCurrent = getCellPosition(current).y;
+                let xNext = getCellPosition(next).x;
+                let yNext = getCellPosition(next).y;
+
+                if (xCurrent === xNext) {
+                    if (yCurrent > yNext) {
+                        current.walls[0] = false;
+                        next.walls[2] = false;
+                    } else {
+                        current.walls[2] = false;
+                        next.walls[0] = false;
+                    }
+                } else if (yCurrent === yNext) {
+                    if (xCurrent > xNext) {
+                        current.walls[3] = false;
+                        next.walls[1] = false;
+                    } else {
+                        current.walls[1] = false;
+                        next.walls[3] = false;
+                    }
+                }
+            }
+
+            function getCellPosition(cell) {
+                for (let x = 0; x < mazeSize; x++) {
+                    for (let y = 0; y < mazeSize; y++) {
+                        if (maze[x][y] === cell) {
+                            return { x: x, y: y };
+                        }
+                    }
+                }
+            }
+        }
+
+        function drawMaze() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 2;
+
+            for (let x = 0; x < mazeSize; x++) {
+                for (let y = 0; y < mazeSize; y++) {
+                    let cell = maze[x][y];
+                    let xPos = x * cellSize;
+                    let yPos = y * cellSize;
+
+                    if (cell.walls[0]) {
+                        ctx.beginPath();
+                        ctx.moveTo(xPos, yPos);
+                        ctx.lineTo(xPos + cellSize, yPos);
+                        ctx.stroke();
+                    }
+                    if (cell.walls[1]) {
+                        ctx.beginPath();
+                        ctx.moveTo(xPos + cellSize, yPos);
+                        ctx.lineTo(xPos + cellSize, yPos + cellSize);
+                        ctx.stroke();
+                    }
+                    if (cell.walls[2]) {
+                        ctx.beginPath();
+                        ctx.moveTo(xPos + cellSize, yPos + cellSize);
+                        ctx.lineTo(xPos, yPos + cellSize);
+                        ctx.stroke();
+                    }
+                    if (cell.walls[3]) {
+                        ctx.beginPath();
+                        ctx.moveTo(xPos, yPos + cellSize);
+                        ctx.lineTo(xPos, yPos);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            // Draw exit point
+            ctx.fillStyle = 'green';
+            ctx.fillRect(exit.x * cellSize + cellSize / 4, exit.y * cellSize + cellSize / 4, cellSize / 2, cellSize / 2);
+        }
+
+        function drawPlayer() {
+            ctx.fillStyle = 'blue';
+            ctx.beginPath();
+            ctx.arc(player.x * cellSize + cellSize / 2, player.y * cellSize + cellSize / 2, cellSize / 3, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (solving) return;
+            let cell = maze[player.x][player.y];
+            if (e.key === 'w' && !cell.walls[0]) {
+                player.y -= 1;
+            } else if (e.key === 'd' && !cell.walls[1]) {
+                player.x += 1;
+            } else if (e.key === 's' && !cell.walls[2]) {
+                player.y += 1;
+            } else if (e.key === 'a' && !cell.walls[3]) {
+                player.x -= 1;
+            }
+
+            drawMaze();
+            drawPlayer();
+
+            if (player.x === exit.x && player.y === exit.y) {
+                alert('You reached the exit!');
+            }
+        });
+
+        function bfs() {
+            let queue = [];
+            let visited = Array.from(Array(mazeSize), () => Array(mazeSize).fill(false));
+            let prev = Array.from(Array(mazeSize), () => Array(mazeSize).fill(null));
+            queue.push({ x: player.x, y: player.y });
+            visited[player.x][player.y] = true;
+
+            function animate() {
+                if (queue.length > 0) {
+                    let current = queue.shift();
+                    let x = current.x;
+                    let y = current.y;
+
+                    if (x === exit.x && y === exit.y) {
+                        reconstructPath(prev);
+                        return;
+                    }
+
+                    let neighbors = getNeighbors(x, y);
+                    for (let neighbor of neighbors) {
+                        if (!visited[neighbor.x][neighbor.y]) {
+                            queue.push(neighbor);
+                            visited[neighbor.x][neighbor.y] = true;
+                            prev[neighbor.x][neighbor.y] = current;
+                        }
+                    }
+
+                    drawMaze();
+                    visualizeVisited(visited);
+                    drawPlayer();
+                    animationFrame = requestAnimationFrame(animate);
+                } else {
+                    solving = false;
+                }
+            }
+            animate();
+        }
+
+        function dfs() {
+            let stack = [];
+            let visited = Array.from(Array(mazeSize), () => Array(mazeSize).fill(false));
+            let prev = Array.from(Array(mazeSize), () => Array(mazeSize).fill(null));
+            stack.push({ x: player.x, y: player.y });
+            visited[player.x][player.y] = true;
+
+            function animate() {
+                if (stack.length > 0) {
+                    let current = stack.pop();
+                    let x = current.x;
+                    let y = current.y;
+
+                    if (x === exit.x && y === exit.y) {
+                        reconstructPath(prev);
+                        return;
+                    }
+
+                    let neighbors = getNeighbors(x, y);
+                    for (let neighbor of neighbors) {
+                        if (!visited[neighbor.x][neighbor.y]) {
+                            stack.push(neighbor);
+                            visited[neighbor.x][neighbor.y] = true;
+                            prev[neighbor.x][neighbor.y] = current;
+                        }
+                    }
+
+                    drawMaze();
+                    visualizeVisited(visited);
+                    drawPlayer();
+                    animationFrame = requestAnimationFrame(animate);
+                } else {
+                    solving = false;
+                }
+            }
+            animate();
+        }
+
+        function getNeighbors(x, y) {
+            let neighbors = [];
+            let cell = maze[x][y];
+            if (!cell.walls[0] && y > 0) {
+                neighbors.push({ x: x, y: y - 1 });
+            }
+            if (!cell.walls[1] && x < mazeSize -1) {
+                neighbors.push({ x: x + 1, y: y });
+            }
+            if (!cell.walls[2] && y < mazeSize -1) {
+                neighbors.push({ x: x, y: y + 1 });
+            }
+            if (!cell.walls[3] && x > 0) {
+                neighbors.push({ x: x -1, y: y });
+            }
+            return neighbors;
+        }
+
+        function visualizeVisited(visited) {
+            for (let x = 0; x < mazeSize; x++) {
+                for (let y = 0; y < mazeSize; y++) {
+                    if (visited[x][y]) {
+                        ctx.fillStyle = 'rgba(255, 0, 0, 0.3)';
+                        ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+                    }
+                }
+            }
+        }
+
+        function reconstructPath(prev) {
+            let path = [];
+            let current = { x: exit.x, y: exit.y };
+            while (current) {
+                path.push(current);
+                current = prev[current.x][current.y];
+            }
+            path.reverse();
+            animatePath(path);
+        }
+
+        function animatePath(path) {
+            let index = 0;
+            function animate() {
+                if (index < path.length) {
+                    drawMaze();
+                    ctx.fillStyle = 'yellow';
+                    for (let i = 0; i <= index; i++) {
+                        ctx.fillRect(path[i].x * cellSize + cellSize / 4, path[i].y * cellSize + cellSize / 4, cellSize / 2, cellSize / 2);
+                    }
+                    drawPlayer();
+                    index++;
+                    animationFrame = requestAnimationFrame(animate);
+                } else {
+                    solving = false;
+                }
+            }
+            animate();
+        }
+
+        init();
+    </script>
+</body>
+</html>
