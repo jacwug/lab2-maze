@@ -4,6 +4,33 @@
     <meta charset="UTF-8">
     <title>Maze Game</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            background-color: #333;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            display: inline-block;
+        }
+
+        nav a:hover {
+            background-color: #555;
+        }
+
+        #container {
+            padding: 20px;
+        }
+
         canvas {
             border: 1px solid black;
         }
@@ -14,6 +41,11 @@
     </style>
 </head>
 <body>
+    <nav>
+        <a href="index.html">Maze Game</a>
+        <a href="forum.html">Forum</a>
+    </nav>
+    <div id="container">
     <canvas id="mazeCanvas" width="600" height="600"></canvas>
     <div id="controls">
         <label for="algorithm">Select Algorithm:</label>
@@ -364,5 +396,6 @@
 
         init();
     </script>
+    </div>
 </body>
 </html>
