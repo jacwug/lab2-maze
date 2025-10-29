@@ -11,9 +11,26 @@
         #controls {
             margin-top: 10px;
         }
+
+        #navigation {
+            margin-bottom: 10px;
+        }
+
+        #navigation a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        #navigation a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
+    <div id="navigation">
+        <a href="about.html">About this game</a>
+    </div>
     <canvas id="mazeCanvas" width="600" height="600"></canvas>
     <div id="controls">
         <label for="algorithm">Select Algorithm:</label>

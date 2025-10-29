@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>About - Maze Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        h2 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        p {
+            line-height: 1.6;
+            color: #666;
+        }
+
+        .navigation {
+            margin: 20px 0;
+        }
+
+        .navigation a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .navigation a:hover {
+            text-decoration: underline;
+        }
+
+        .features {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        .features li {
+            margin: 10px 0;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="navigation">
+        <a href="index.html">← Back to Maze Game</a>
+    </div>
+
+    <h1>About Maze Game</h1>
+
+    <h2>Overview</h2>
+    <p>
+        This is an interactive maze game that demonstrates classic maze generation and pathfinding algorithms. 
+        The game generates random mazes and allows you to either solve them manually or watch automated 
+        algorithms find the solution.
+    </p>
+
+    <h2>Features</h2>
+    <ul class="features">
+        <li><strong>Random Maze Generation:</strong> Each time you reset, a new unique maze is created using a recursive backtracker algorithm.</li>
+        <li><strong>Manual Navigation:</strong> Use the W, A, S, D keys to navigate through the maze yourself.</li>
+        <li><strong>Automated Solving:</strong> Watch as Breadth-First Search (BFS) or Depth-First Search (DFS) algorithms find the solution.</li>
+        <li><strong>Visual Algorithm Exploration:</strong> See how the algorithms explore different paths to find the solution.</li>
+        <li><strong>Customizable Size:</strong> Adjust the maze size from 5x5 up to 100x100 cells.</li>
+    </ul>
+
+    <h2>How to Play</h2>
+    <p>
+        <strong>Manual Mode:</strong> Use the keyboard keys W (up), A (left), S (down), and D (right) to navigate 
+        the blue player through the maze. Your goal is to reach the green exit square.
+    </p>
+    <p>
+        <strong>Automated Solving:</strong> Select an algorithm from the dropdown menu and click "Solve Maze" to 
+        watch the computer find the solution. Red highlights show explored cells, and yellow shows the final path.
+    </p>
+
+    <h2>Algorithms</h2>
+    <p>
+        <strong>Breadth-First Search (BFS):</strong> Explores the maze level by level, guaranteeing the shortest path.
+    </p>
+    <p>
+        <strong>Depth-First Search (DFS):</strong> Explores as far as possible along each branch before backtracking.
+    </p>
+
+    <div class="navigation">
+        <a href="index.html">← Back to Maze Game</a>
+    </div>
+</body>
+</html>
