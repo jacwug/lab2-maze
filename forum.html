@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Forum - Maze Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        nav {
+            background-color: #333;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            display: inline-block;
+        }
+
+        nav a:hover {
+            background-color: #555;
+        }
+
+        #container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .forum-section {
+            background-color: white;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .forum-section h2 {
+            color: #2c3e50;
+            margin-top: 0;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .thread {
+            border-left: 3px solid #3498db;
+            padding: 15px;
+            margin: 10px 0;
+            background-color: #f9f9f9;
+            border-radius: 3px;
+            transition: background-color 0.3s;
+        }
+
+        .thread:hover {
+            background-color: #e8f4f8;
+        }
+
+        .thread-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .thread-author {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .thread-preview {
+            color: #555;
+            font-size: 0.95em;
+        }
+
+        .thread-stats {
+            color: #95a5a6;
+            font-size: 0.85em;
+            margin-top: 8px;
+        }
+
+        #new-thread-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        #new-thread-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .new-thread-form {
+            display: none;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .new-thread-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-buttons {
+            margin-top: 15px;
+        }
+
+        .form-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        .submit-btn {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        .submit-btn:hover {
+            background-color: #229954;
+        }
+
+        .cancel-btn {
+            background-color: #95a5a6;
+            color: white;
+        }
+
+        .cancel-btn:hover {
+            background-color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">Maze Game</a>
+        <a href="forum.html">Forum</a>
+    </nav>
+    <div id="container">
+        <h1>Maze Game Forum</h1>
+        
+        <button id="new-thread-btn">Create New Thread</button>
+
+        <div class="new-thread-form" id="new-thread-form">
+            <h2>Create New Thread</h2>
+            <div class="form-group">
+                <label for="thread-title">Title:</label>
+                <input type="text" id="thread-title" placeholder="Enter thread title">
+            </div>
+            <div class="form-group">
+                <label for="thread-author">Your Name:</label>
+                <input type="text" id="thread-author" placeholder="Enter your name">
+            </div>
+            <div class="form-group">
+                <label for="thread-content">Message:</label>
+                <textarea id="thread-content" placeholder="Enter your message"></textarea>
+            </div>
+            <div class="form-buttons">
+                <button class="submit-btn" id="submit-thread">Post Thread</button>
+                <button class="cancel-btn" id="cancel-thread">Cancel</button>
+            </div>
+        </div>
+
+        <div class="forum-section">
+            <h2>General Discussion</h2>
+            <div class="thread">
+                <div class="thread-title">Welcome to the Maze Game Forum!</div>
+                <div class="thread-author">Posted by: Admin</div>
+                <div class="thread-preview">Welcome to the forum! Share your maze strategies, discuss algorithms, and connect with other players.</div>
+                <div class="thread-stats">👁️ 42 views • 💬 5 replies</div>
+            </div>
+            <div class="thread">
+                <div class="thread-title">Best Algorithm for Large Mazes?</div>
+                <div class="thread-author">Posted by: MazeMaster</div>
+                <div class="thread-preview">I've been experimenting with different maze sizes. For mazes larger than 50x50, which search algorithm do you find most efficient?</div>
+                <div class="thread-stats">👁️ 28 views • 💬 3 replies</div>
+            </div>
+        </div>
+
+        <div class="forum-section">
+            <h2>Strategy & Tips</h2>
+            <div class="thread">
+                <div class="thread-title">BFS vs DFS: Which is Better?</div>
+                <div class="thread-author">Posted by: AlgoExpert</div>
+                <div class="thread-preview">Let's discuss the pros and cons of Breadth-First Search versus Depth-First Search for maze solving.</div>
+                <div class="thread-stats">👁️ 67 views • 💬 12 replies</div>
+            </div>
+            <div class="thread">
+                <div class="thread-title">Tips for Manual Navigation</div>
+                <div class="thread-author">Posted by: SpeedRunner</div>
+                <div class="thread-preview">Here are my top tips for navigating mazes manually without using the solver...</div>
+                <div class="thread-stats">👁️ 35 views • 💬 7 replies</div>
+            </div>
+        </div>
+
+        <div class="forum-section">
+            <h2>Bug Reports & Suggestions</h2>
+            <div class="thread">
+                <div class="thread-title">Feature Request: Add A* Algorithm</div>
+                <div class="thread-author">Posted by: DevUser</div>
+                <div class="thread-preview">Would be great to have A* pathfinding as an option in the algorithm dropdown.</div>
+                <div class="thread-stats">👁️ 19 views • 💬 4 replies</div>
+            </div>
+        </div>
+
+        <div id="user-threads" class="forum-section" style="display: none;">
+            <h2>User Created Threads</h2>
+        </div>
+    </div>
+
+    <script>
+        // Forum functionality
+        const newThreadBtn = document.getElementById('new-thread-btn');
+        const newThreadForm = document.getElementById('new-thread-form');
+        const submitThreadBtn = document.getElementById('submit-thread');
+        const cancelThreadBtn = document.getElementById('cancel-thread');
+        const userThreadsSection = document.getElementById('user-threads');
+
+        newThreadBtn.addEventListener('click', function() {
+            newThreadForm.classList.add('active');
+            newThreadBtn.style.display = 'none';
+        });
+
+        cancelThreadBtn.addEventListener('click', function() {
+            newThreadForm.classList.remove('active');
+            newThreadBtn.style.display = 'block';
+            clearForm();
+        });
+
+        submitThreadBtn.addEventListener('click', function() {
+            const title = document.getElementById('thread-title').value.trim();
+            const author = document.getElementById('thread-author').value.trim();
+            const content = document.getElementById('thread-content').value.trim();
+
+            if (!title || !author || !content) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Create new thread element
+            const threadDiv = document.createElement('div');
+            threadDiv.className = 'thread';
+            threadDiv.innerHTML = `
+                <div class="thread-title">${escapeHtml(title)}</div>
+                <div class="thread-author">Posted by: ${escapeHtml(author)}</div>
+                <div class="thread-preview">${escapeHtml(content)}</div>
+                <div class="thread-stats">👁️ 0 views • 💬 0 replies</div>
+            `;
+
+            // Show user threads section if hidden
+            userThreadsSection.style.display = 'block';
+            userThreadsSection.appendChild(threadDiv);
+
+            // Reset form
+            newThreadForm.classList.remove('active');
+            newThreadBtn.style.display = 'block';
+            clearForm();
+        });
+
+        function clearForm() {
+            document.getElementById('thread-title').value = '';
+            document.getElementById('thread-author').value = '';
+            document.getElementById('thread-content').value = '';
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
